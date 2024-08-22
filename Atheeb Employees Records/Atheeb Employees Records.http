@@ -1,0 +1,6 @@
+@Atheeb_Employees_Records_HostAddress = http://localhost:5197
+
+GET {{Atheeb_Employees_Records_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
