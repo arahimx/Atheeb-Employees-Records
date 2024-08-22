@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240822132440_AddUserSkillsTabe")]
-    partial class AddUserSkillsTabe
+    [Migration("20240822163350_initialMgrat")]
+    partial class initialMgrat
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -133,7 +133,7 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("HiringDate")
+                    b.Property<DateTime>("JoiningDate")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("LeaveDate")
@@ -166,8 +166,11 @@ namespace Infrastructure.Migrations
                     b.Property<decimal?>("Bounce")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int?>("CertificatesId")
-                        .HasColumnType("int");
+                    b.Property<string>("CertificateAttachment")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CertificateName")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("DepartmentId")
                         .HasColumnType("int");
@@ -197,9 +200,6 @@ namespace Infrastructure.Migrations
                     b.Property<int?>("PreviousEmployersId")
                         .HasColumnType("int");
 
-                    b.Property<int>("SkillId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -209,38 +209,30 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CertificatesId");
-
                     b.HasIndex("DepartmentId");
 
                     b.HasIndex("PreviousEmployersId");
-
-                    b.HasIndex("SkillId");
 
                     b.ToTable("UserInfo");
                 });
 
             modelBuilder.Entity("Core.Entity.UsersSkills", b =>
                 {
-                    b.Property<int>("SkillId")
-                        .HasColumnType("int");
-
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
+                    b.Property<int>("SkillId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "SkillId");
+
                     b.HasIndex("SkillId");
 
-                    b.HasIndex("UserId");
-
-                    b.ToView("UsersSkills");
+                    b.ToTable("UserSkills");
                 });
 
             modelBuilder.Entity("Core.Entity.UserInfo", b =>
                 {
-                    b.HasOne("Core.Entity.UserCertificates", "Certificates")
-                        .WithMany()
-                        .HasForeignKey("CertificatesId");
-
                     b.HasOne("Core.Entity.Departments", "Department")
                         .WithMany()
                         .HasForeignKey("DepartmentId")
@@ -251,19 +243,9 @@ namespace Infrastructure.Migrations
                         .WithMany()
                         .HasForeignKey("PreviousEmployersId");
 
-                    b.HasOne("Core.Entity.Skills", "Skill")
-                        .WithMany()
-                        .HasForeignKey("SkillId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Certificates");
-
                     b.Navigation("Department");
 
                     b.Navigation("PreviousEmployers");
-
-                    b.Navigation("Skill");
                 });
 
             modelBuilder.Entity("Core.Entity.UsersSkills", b =>

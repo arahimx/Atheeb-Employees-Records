@@ -131,7 +131,7 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("HiringDate")
+                    b.Property<DateTime>("JoiningDate")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("LeaveDate")
@@ -216,17 +216,17 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Core.Entity.UsersSkills", b =>
                 {
-                    b.Property<int>("SkillId")
-                        .HasColumnType("int");
-
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
+                    b.Property<int>("SkillId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "SkillId");
+
                     b.HasIndex("SkillId");
 
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserSkills", (string)null);
+                    b.ToTable("UserSkills");
                 });
 
             modelBuilder.Entity("Core.Entity.UserInfo", b =>
